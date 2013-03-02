@@ -26,6 +26,7 @@ class simpleModePanel(wx.Panel):
 		self.printMaterialDiameter = wx.TextCtrl(printMaterialPanel, -1, profile.getProfileSetting('filament_diameter'))
 		
 		self.printSupport = wx.CheckBox(self, -1, 'Print support structure')
+		self.printRetract = wx.CheckBox(self, -1, 'Use retraction')
 		
 		sizer = wx.GridBagSizer()
 		self.SetSizer(sizer)
@@ -53,10 +54,12 @@ class simpleModePanel(wx.Panel):
 		sb = wx.StaticBox(self, label="Other:")
 		boxsizer = wx.StaticBoxSizer(sb, wx.VERTICAL)
 		boxsizer.Add(self.printSupport)
+		boxsizer.Add(self.printRetract)
 		sizer.Add(boxsizer, (2,0), flag=wx.EXPAND)
 
 		self.printTypeNormal.SetValue(True)
 		self.printMaterialPLA.SetValue(True)
+		self.printRetract.setValue(True)
 
 	def setupSlice(self):
 		put = profile.putProfileSetting
@@ -69,7 +72,7 @@ class simpleModePanel(wx.Panel):
 		put('skirt_line_count', '1')
 		put('skirt_gap', '6.0')
 		put('print_speed', '50')
-		put('print_temperature', '220')
+		put('print_temperature', '230')
 		put('support', 'None')
 		put('retraction_enable', 'False')
 		put('retraction_min_travel', '5.0')
@@ -101,6 +104,8 @@ class simpleModePanel(wx.Panel):
 
 		if self.printSupport.GetValue():
 			put('support', 'Exterior Only')
+		if self.printRetract.GetValue():
+			put('retraction_enable', 'True')
 
 		nozzle_size = float(get('nozzle_size'))
 		if self.printTypeNormal.GetValue():
